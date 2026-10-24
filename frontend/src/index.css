@@ -1,0 +1,57 @@
+@import "tailwindcss";
+/* Self-hosted variable font with a width axis (62%-125%), bundled by Vite -- no external request. */
+@import "@fontsource-variable/archivo/wdth.css";
+
+/*
+  Design tokens. Tailwind v4 turns every --color-* here into utilities
+  like bg-petrol, text-marigold, border-brake ... so the palette lives in one place.
+*/
+@theme {
+  --color-petrol: #0F3D3E;
+  --color-petrol-soft: #1D5557;
+  --color-showroom: #EEF2EF;
+  --color-marigold: #F2B33D;
+  --color-marigold-deep: #D9961A;
+  --color-asphalt: #23292B;
+  --color-gravel: #5E6A6B;
+  --color-brake: #D64545;
+  --color-mint: #9FD8C4;
+  --color-plate: #FFFFFF;
+
+  --font-sans: "Archivo Variable", system-ui, sans-serif;
+}
+
+/* Headlines use Archivo's expanded width -- the stretched look of a car badge. */
+.font-badge {
+  font-family: var(--font-sans);
+  font-stretch: 125%;
+  letter-spacing: -0.01em;
+}
+
+/* Number plates and stock counts use the condensed width. */
+.font-plate {
+  font-family: var(--font-sans);
+  font-stretch: 75%;
+}
+
+body {
+  @apply bg-showroom text-asphalt antialiased;
+  font-family: var(--font-sans);
+}
+
+/* Clear, consistent keyboard focus everywhere. */
+:focus-visible {
+  outline: 3px solid var(--color-marigold);
+  outline-offset: 2px;
+}
+
+/* The one orchestrated motion: cars roll in when the lot first loads. */
+@keyframes roll-in {
+  from { transform: translateX(-28px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+.roll-in { animation: roll-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .roll-in { animation: none; }
+}
