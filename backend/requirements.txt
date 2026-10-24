@@ -1,0 +1,21 @@
+# Web framework + server
+fastapi==0.161.1
+uvicorn[standard]==0.54.0
+
+# Database (SQLAlchemy ORM; psycopg is the PostgreSQL driver used in production)
+SQLAlchemy==2.1.6
+psycopg[binary]==3.3.6
+
+# Settings + validation (EmailStr needs email-validator)
+pydantic==2.13.5
+pydantic-settings==2.16.1
+email-validator==2.3.0
+
+# Auth: password hashing + JWT tokens
+bcrypt==5.0.0
+PyJWT==2.15.0
+
+# Testing
+pytest==9.1.1
+pytest-cov==7.1.0
+httpx==0.28.1

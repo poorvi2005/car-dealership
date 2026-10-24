@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local database + secrets
+*.db
+.env
+
+# Node
+node_modules/
+dist/
+frontend/.env.local
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
