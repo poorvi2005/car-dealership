@@ -1,12 +1,12 @@
 """Vehicle catalogue and stock rules."""
 from decimal import Decimal
 
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update
 from sqlalchemy.orm import Session
 
 from app.models import Vehicle
 from app.schemas import VehicleCreate, VehicleUpdate
-from app.services import NotFoundError
+from app.services import NotFoundError, OutOfStockError
 
 
 class VehicleService:
@@ -66,3 +66,38 @@ class VehicleService:
         vehicle = self.get(vehicle_id)
         self.db.delete(vehicle)
         self.db.commit()
+
+    def purchase(self, vehicle_id: int, quantity: int = 1) -> Vehicle:
+        """
+        Decrease stock atomically.
+
+        A naive "read quantity, subtract, save" lets two buyers grab the last car at the
+        same time. Instead we run ONE conditional UPDATE: it only succeeds if enough stock
+        is still there at the moment the database executes it.
+        """
+        self.get(vehicle_id)  # 404 if the vehicle doesn't exist
+        result = self.db.execute(
+            update(Vehicle)
+            .where(Vehicle.id == vehicle_id, Vehicle.quantity >= quantity)
+            .values(quantity=Vehicle.quantity - quantity)
+        )
+        if result.rowcount == 0:
+            self.db.rollback()
+            raise OutOfStockError("Not enough stock to complete this purchase")
+        self.db.commit()
+        return self._reload(vehicle_id)
+
+    def restock(self, vehicle_id: int, quantity: int) -> Vehicle:
+        self.get(vehicle_id)
+        self.db.execute(
+            update(Vehicle)
+            .where(Vehicle.id == vehicle_id)
+            .values(quantity=Vehicle.quantity + quantity)
+        )
+        self.db.commit()
+        return self._reload(vehicle_id)
+
+    def _reload(self, vehicle_id: int) -> Vehicle:
+        vehicle = self.get(vehicle_id)
+        self.db.refresh(vehicle)
+        return vehicle

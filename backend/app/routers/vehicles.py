@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.dependencies import get_current_user, require_admin
 from app.schemas import VEHICLE_CATEGORIES, StockChange, VehicleCreate, VehicleOut, VehicleUpdate
-from app.services import NotFoundError
+from app.services import NotFoundError, OutOfStockError
 from app.services.vehicle_service import VehicleService
 
 router = APIRouter(prefix="/api/vehicles", tags=["vehicles"], dependencies=[Depends(get_current_user)])
@@ -82,11 +82,23 @@ def delete_vehicle(vehicle_id: int, service: VehicleService = Depends(get_servic
 
 
 @router.post("/{vehicle_id}/purchase", response_model=VehicleOut)
-def purchase_vehicle(vehicle_id: int, body: StockChange | None = None):
-    # Stub: route exists (so auth checks are testable) but buying isn't built yet.
-    raise HTTPException(status_code=status.HTTP_501_NOT_IMPLEMENTED, detail="Not implemented yet")
+def purchase_vehicle(
+    vehicle_id: int,
+    body: StockChange | None = None,
+    service: VehicleService = Depends(get_service),
+):
+    quantity = body.quantity if body else 1
+    try:
+        return service.purchase(vehicle_id, quantity)
+    except NotFoundError as e:
+        raise _not_found(e)
+    except OutOfStockError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 
 @router.post("/{vehicle_id}/restock", response_model=VehicleOut, dependencies=[Depends(require_admin)])
-def restock_vehicle(vehicle_id: int, body: StockChange):
-    raise HTTPException(status_code=status.HTTP_501_NOT_IMPLEMENTED, detail="Not implemented yet")
+def restock_vehicle(vehicle_id: int, body: StockChange, service: VehicleService = Depends(get_service)):
+    try:
+        return service.restock(vehicle_id, body.quantity)
+    except NotFoundError as e:
+        raise _not_found(e)
