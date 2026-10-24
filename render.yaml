@@ -1,0 +1,20 @@
+# Render Blueprint: deploys the FastAPI backend as a free web service.
+# Render dashboard -> New -> Blueprint -> pick this repo. It reads this file.
+services:
+  - type: web
+    name: forecourt-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL      # paste your Neon connection string when prompted
+        sync: false
+      - key: JWT_SECRET        # Render generates a strong random value
+        generateValue: true
+      - key: ADMIN_EMAILS
+        value: admin@dealership.com
+      - key: CORS_ORIGINS      # your Vercel URL, e.g. https://forecourt.vercel.app
+        sync: false
