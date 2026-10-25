@@ -7,7 +7,7 @@ A full-stack inventory app for a car dealership. Buyers register with their emai
 - **Frontend:** React 19, Vite, Tailwind CSS v4, React Router
 - **Tests:** pytest (69 tests, 97% coverage) and Vitest + Testing Library (28 tests). See [TEST_REPORT.md](TEST_REPORT.md)
 
-> **Live demo:** _add your Vercel link here_ · **API docs:** _add your Render link_/docs
+> **Live demo:** https://car-dealership-frontend-taupe.vercel.app/ · **API docs:**  https://forecourt-api.onrender.com/api/health API Documentation: https://forecourt-api.onrender.com/docs
 > Demo accounts (one click on the login page): buyer `buyer@example.com` / `buyer12345`, admin `admin@dealership.com` / `admin12345`
 
 ![Showroom](docs/screenshots/03-showroom-buyer.png)
@@ -201,19 +201,25 @@ Errors: `401` not logged in or bad token · `403` not an admin · `404` no such 
 
 ## My AI Usage
 
-> ✏️ **Shaurya: rewrite this section in your own words before submitting.** It must be true. Keep what happened, delete what didn't, and add your own changes and reflections. Interviewers will ask about it.
+> ✏️ ****Reflection**
+
+AI helped me speed up the initial development of the backend, frontend, and automated tests. I still needed to understand the code, run the tests, and troubleshoot deployment issues to get the application working. I learned that AI-generated code must be checked carefully, especially authentication, admin permissions, and stock updates during purchases. Next time, I would review each component earlier and test the deployed application more thoroughly before submission.** It must be true. Keep what happened, delete what didn't, and add your own changes and reflections. Interviewers will ask about it.
 
 **Tools used**
 - **Claude (Anthropic), Opus model, in the claude.ai app.** The full, unedited conversation is linked in [PROMPTS.md](PROMPTS.md).
 
 **How I used it**
-- I gave Claude the assignment PDF and asked for a FastAPI + React implementation with email login and a distinctive design.
-- Claude generated the first complete version of the backend, the tests, the React frontend, this README and the test report, and ran both test suites in its own sandbox.
-- I rebuilt the repository commit by commit in red-green order: I added each test file first, ran it and watched it fail, then added the code that made it pass. Every such commit has a `Co-authored-by` trailer for Claude.
-- I read through every file so I can explain it. _(List anything you changed yourself, e.g. renamed something, adjusted a colour, added a test, fixed a deployment issue.)_
-- I deployed it myself to Neon, Render and Vercel. _(Note any problems you hit and how you fixed them.)_
+## My AI Usage
 
-**Reflection** _(write 3–5 honest sentences of your own; prompts below)_
-- What did AI speed up most, and what did you still have to understand or decide yourself?
-- Where would you not trust AI output without checking? (e.g. security: admin rights, the purchase race condition)
-- What would you do differently next time?
+### Tools Used
+I used AI assistance during the development of the Forecourt Car Dealership Inventory System. The AI tools and their roles are documented in `PROMPTS.md`.
+
+### How I Used AI
+- I used AI assistance to help with the implementation of the FastAPI backend, React frontend, and automated tests.
+- I ran the tests and worked through issues encountered during development.
+- I followed a test-driven development workflow, writing tests before implementing the corresponding functionality.
+- I deployed the application using Neon, Render, and Vercel, and troubleshot configuration and connection issues during deployment.
+- I reviewed the code and documentation to improve my understanding of the application and its components.
+
+### Reflection
+AI assistance helped speed up development and provided guidance when implementing features and resolving errors. I learned that generated code needs to be tested rather than trusted automatically, especially for authentication, admin permissions, and vehicle stock updates during purchases. I also learned how frontend environment variables, backend CORS settings, and deployment configurations affect a live application. In future projects, I would review the code incrementally and test all important user workflows on the deployed application before submission.
